@@ -4,11 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="314bfb6b-c6cd-485a-ab12-96f6d8310f04" name="Changes" comment="" />
+    <list default="true" id="314bfb6b-c6cd-485a-ab12-96f6d8310f04" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/FAQ.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/data-processing.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/pipeline.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipeline.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirments.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/align-data-sorter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/clean-dataset.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/copy-training-data-to-one-space.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clip-cutter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/clip-cutter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manifest-creator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/manifest-creator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/text-sanitizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/text-sanitizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tree-2-json.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tree-2-json.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="RMarkdown.notebook" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 0
@@ -20,9 +45,20 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/alex/DataspellProjects/DatasetCreator/imgs/pipeline.png"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tools" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

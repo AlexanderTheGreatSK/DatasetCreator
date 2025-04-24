@@ -1,0 +1,1 @@
+find . -type d -name "training-data" -exec bash -c 'cp -r "$0"/* ../training-data' {} \;
