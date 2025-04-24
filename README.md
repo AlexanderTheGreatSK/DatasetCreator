@@ -1,8 +1,7 @@
 # Dataset Creator
 ***
 
-This toolkit is for creating a dataset with aligned data, ready for fine-tuning ASR models.
-
+This toolkit creates a dataset with aligned data, ready for fine-tuning ASR models.
 
 ![pipeline image](/imgs/pipeline.png)
 
@@ -10,21 +9,22 @@ This toolkit is for creating a dataset with aligned data, ready for fine-tuning 
 ![data transformation image](/imgs/data-processing.png)
 
 # Input limitations
-It is expected that each audio will be in different directory, with one transcription file.
+Each audio is expected to be in a different directory, with one transcription file.
 If you have more transcription files for one audio file, you have two options:
-- concatenate this files into just one file
-- create for each text file new directory and copy that audio file there, to get one text file for one audio file
+- concatenate these files into just one file
+- create for each text file new directory and copy that audio file there to get one text file for one audio file
 
+The audio might be stereo or mono, but tree-2-json.py will create the missing one.
 Audio might be stereo or mono, *tree-2-json.py* will create the missing one. All operations with audio files are done with both versions.
 
 The best audio format is `.wav`, but if you provide other supported formats  - `.mp3`, `.m4a`,`.flac`, it will be converted to `.wav`
 
 ## Transcription file format
-File can have header with information about date, place, speakers etc. This files will be ignored and stay on original file.
-Transcribed audio segment have to start with time interval, supported time intervals are *hh:mm:ss-hh:mm:ss* or *mm:ss-mm:ss*.
-After this time interval have to follow text. Supported is plain text or interview format. If difference between start time and end time is 0, it will be printed to stdout and text won't be sanitized.
+The file can have a header with information about the date, place, speakers, etc. These files will be ignored and will remain in the original file.
+Transcribed audio segments have to start with time intervals; supported time intervals are *hh:mm:ss-hh:mm:ss* or *mm:ss-mm:ss*.
+After this time interval, the text has to follow. Supported is plain text or interview format. If the difference between start time and end time is 0, it will be printed to stdout, and text won't be sanitized.
 
-Text sanitizer will remove *#* which are used for filled pause and all brackets with text inside will be removed too.
+Text sanitizer will remove the *#* characters, which are used for filled pauses. All brackets with text inside are removed, too.
 
 ### Supported transcription file examples
 ```
