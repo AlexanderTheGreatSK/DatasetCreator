@@ -1,3 +1,19 @@
+""""
+    align-data-sorter.py
+
+    Author: xokruc00
+    Email: xokruc00@fit.vutbr.cz
+
+    This script will copy all aligned .ctm files to the dataset and updates the dataset.json file.
+    If an alignment file is missing it will print it to stdout.
+
+    Input:
+        -d / --dataset - path to dataset.json
+        -a / --aligned-data - path to directory with .ctm files
+        -c / --clips - path to directory with all clips
+
+"""
+
 import getopt
 import json
 import os
