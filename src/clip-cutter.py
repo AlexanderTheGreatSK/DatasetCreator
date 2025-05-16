@@ -1,3 +1,20 @@
+"""
+    clip-cutter.py
+
+    Author: xokruc00
+    Email: xokruc00@fit.vutbr.cz
+
+    This script cuts audio from the dataset JSON to sub-30-second segments with its transcribed sentence.
+    As an output it creates mono_output.tsv with columns audio, sentence and length. This tsv file is ready for
+    training Whisper model.
+
+    Input:
+        -d / --dataset - path to dataset.json
+        -o / --output - path to output directory
+        -s / --stereo - flag for stereo audio
+
+"""
+
 import sys
 import getopt
 import json
@@ -6,22 +23,19 @@ from pathlib import Path
 import pydub
 import csv
 
-# Inputs:
-# input json file with audio and ctm
-# output directory
-
 dataset_file = None
 output_path = None
 tsv_header = ['audio', 'sentence', 'length']
 mono_tsv_row = []
 stereo_tsv_row = []
 stereo = False
+override_path = None
 
 def get_parameters():
     argv = sys.argv[1:]
 
     try:
-        opts, args = getopt.getopt(argv, "hd:o:s", ["dataset=", "output=", "stereo"])
+        opts, args = getopt.getopt(argv, "hd:o:p:s", ["dataset=", "output=", "override-path=", "stereo"])
     except:
         print("Error")
         exit(1)
@@ -36,9 +50,9 @@ def get_parameters():
         elif opt in ("-s", "--stereo"):
             global stereo
             stereo = True
-
-    print(dataset_file)
-    print(output_path)
+        elif opt in ("-op", "--override-path"):
+            global override_path
+            override_path = arg
 
 
 def write_to_tsv():
@@ -49,7 +63,14 @@ def write_to_tsv():
 
     print(output_path)
     mono_out = output_path + "mono_output.tsv"
-    stereo_out = output_path + "mono_output.tsv"
+    stereo_out = output_path + "stereo_output.tsv"
+
+    if stereo:
+        with open(stereo_out, "w") as tsv_file:
+            writer = csv.writer(tsv_file, delimiter="\t")
+            writer.writerow(tsv_header)
+            writer.writerows(mono_tsv_row)
+            tsv_file.close()
 
     with open(mono_out, "w") as tsv_file:
         writer = csv.writer(tsv_file, delimiter="\t")
@@ -71,7 +92,7 @@ def cut_audio(path, name, audio, start, end):
 def compute_cuts(ctm_file, max_segment_length, mono_audio, stereo_audio, output_dir, filename):
     text = ""
     time = 0.0
-    segment_dynamic_length = float(max_segment_length)
+    segment_dynamic_time = float(max_segment_length)
     global mono_tsv_row
     global stereo_tsv_row
 
@@ -79,7 +100,8 @@ def compute_cuts(ctm_file, max_segment_length, mono_audio, stereo_audio, output_
     segment_counter = 1
     clip_name = ""
     segment_start = 0.0
-    final_out_path = "/mnt/matylda6/xokruc00/training-data/mono/"
+    # final_out_path = "/run/media/alex/fd10f3e8-6e40-44bd-bf1b-3c72bf2e1900/BP24/dataset/training-data/mono/"
+    new_stereo_name = ""
 
     for line in ctm_file:
         line_list = line.split()
@@ -91,22 +113,28 @@ def compute_cuts(ctm_file, max_segment_length, mono_audio, stereo_audio, output_
             new_segment = False
 
         word_end = float(line_list[2]) + float(line_list[3])
-        if word_end > segment_dynamic_length:
+        if word_end > segment_dynamic_time:
 
             new_mono_name = filename + "_m" + str(segment_counter) + ".wav"
             new_stereo_name = filename + "_s" + str(segment_counter) + ".wav"
             clip_len = time - float(segment_start)
 
-            mono_tsv_row.append([final_out_path + new_mono_name, text, round(clip_len,2)])
+            mono_tsv_row.append([override_path + new_mono_name, text, round(clip_len,2)])
+
+            if stereo:
+                stereo_tsv_row.append([override_path + new_stereo_name, text, round(clip_len,2)])
 
             cut_audio(output_dir + "mono/", new_mono_name, mono_audio, round(float(segment_start),2), round(float(time),2))
+
+            if stereo:
+                cut_audio(output_dir + "stereo/", new_stereo_name, stereo_audio, round(float(segment_start),2), round(float(time),2))
 
             new_segment = True
             segment_counter += 1
             time = float(line_list[2])
             text = line_list[4]
             segment_start = line_list[2]
-            segment_dynamic_length += float(max_segment_length)
+            segment_dynamic_time += float(max_segment_length)
         else:
             if text == "":
                 text = text + line_list[4]
@@ -117,11 +145,21 @@ def compute_cuts(ctm_file, max_segment_length, mono_audio, stereo_audio, output_
 
     if text != "":
         new_mono_name = filename + "_m" + str(segment_counter) + ".wav"
+
+        if stereo:
+            new_stereo_name = filename + "_s" + str(segment_counter) + ".wav"
+
         clip_len = time - float(segment_start)
 
-        mono_tsv_row.append([final_out_path + new_mono_name, text, round(clip_len,2)])
+        mono_tsv_row.append([override_path + new_mono_name, text, round(clip_len,2)])
+
+        if stereo:
+            stereo_tsv_row.append([override_path + new_stereo_name, text, round(clip_len,2)])
+
         cut_audio(output_dir + "mono/", new_mono_name, mono_audio, round(float(segment_start),2) , round(float(time),2))
 
+        if stereo:
+            cut_audio(output_dir + "stereo/", new_stereo_name, stereo_audio, round(float(segment_start),2), round(float(time),2))
 
 get_parameters()
 

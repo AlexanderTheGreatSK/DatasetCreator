@@ -1,6 +1,9 @@
 """"
     tree-2-json.py
 
+    Author: xokruc00
+    Email: xokruc00@fit.vutbr.cz
+
     This script creates dataset.json from directory structure. It uses unix command tree -J, to get a directory
     structure in json. This json is processed. During processing original audio will be converted to wav file.
     From converted wav file will be created its mono or stereo version.
@@ -75,8 +78,9 @@ def audio_to_wav(path, filename):
     if filetype != "wav":
         sound = AudioSegment.from_file(path + filename)
         split = filename.split(".")
-        sound.export(path + split[0] + ".wav", format="wav")
-        return split[0] + ".wav"
+        wav_name = split[0] + ".wav"
+        sound.export(path + wav_name, format="wav")
+        return wav_name
 
 def create_audio_info_json(sample_rate, duration, channels, codec_name):
     media_info_json = {}
@@ -317,12 +321,10 @@ def process_tree_json(file):
                                         clip["prep-data-alignment"]["mono"] = mono_prep_data_alignment
                         elif "aligned-data" in subitem["name"]:
                             print("Aligned data")
-                            # TODO finish
-                        elif "fine-tuning-data" in subitem["name"]:
-                            # TODO finish
+                        elif "training-data" in subitem["name"]:
                             print("Fine-tuned data")
                         else:
-                            print("Not supported direcotry:", subitem["name"])
+                            print("Else:", subitem["name"])
             json_out["data"].append(clip)
 
     json_out["total-duration-sec"] = round(total_duration,2)

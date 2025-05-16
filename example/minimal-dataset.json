@@ -1,0 +1,57 @@
+{
+  "path": "/run/media/alex/fd10f3e8-6e40-44bd-bf1b-3c72bf2e1900/BP24/dataset-reduced/clips/",
+  "data": [
+    {
+      "dir-name": "aSS2YfUdrFQa2Qn5A0Y0r5zdPY5dkSs5",
+      "original-audio": "587478_2022_01-Luka_nad_Jihlavou_JI.wav",
+      "audio-info": {
+        "sample-rate": 44100,
+        "duration-sec": 3830.09,
+        "channels": 1,
+        "codec-name": "pcm_s16le"
+      },
+      "mono-original-audio": "587478_2022_01-Luka_nad_Jihlavou_JI.wav",
+      "stereo-original-audio": "587478_2022_01-Luka_nad_Jihlavou_JI-stereo.wav",
+      "raw-text": "587478_2022_01-Luka_nad_Jihlavou_JI.txt",
+      "prep-data-alignment": {
+        "mono": [
+          {
+            "duration-sec": 187,
+            "text": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_38:18-41:25.txt",
+            "audio": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_38:18-41:25.wav"
+          },
+          {
+            "duration-sec": 215,
+            "text": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_52:25-56:00.txt",
+            "audio": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_52:25-56:00.wav"
+          }
+        ],
+        "stereo": [
+          {
+            "duration-sec": 187,
+            "text": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_38:18-41:25.txt",
+            "audio": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_38:18-41:25.wav"
+          },
+          {
+            "duration-sec": 215,
+            "text": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_52:25-56:00.txt",
+            "audio": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_52:25-56:00.wav"
+          }
+        ]
+      },
+      "aligned-data": [
+        {
+          "ctm-file": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_38:18-41:25.ctm"
+        },
+        {
+          "ctm-file": "587478_2022_01-Luka_nad_Jihlavou_JI_xs_52:25-56:00.ctm"
+        }
+      ]
+    }
+  ],
+  "total-duration-sec": 3830.09,
+  "total-audio-files": 1,
+  "total-directories": 1,
+  "total-text-files": 1,
+  "total-aligned-seconds": 402
+}

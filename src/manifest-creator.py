@@ -1,3 +1,16 @@
+"""
+    manifest-creator.py
+
+    Author: xokruc00
+    Email: xokruc00@fit.vutbr.cz
+
+    This script creates manifest files for a NeMo Force Aligner from the dataset.json file.
+
+    Input:
+        -d / --dataset - path to dataset.json
+"""
+
+
 import getopt
 import json
 import sys
@@ -7,13 +20,13 @@ def get_parameters():
     argv = sys.argv[1:]
 
     try:
-        opts, args = getopt.getopt(argv, "hi:", ["input="])
+        opts, args = getopt.getopt(argv, "hd:", ["dataset="])
     except:
         print("Error")
         exit(1)
 
     for opt, arg in opts:
-        if opt in ("-i", "--input"):
+        if opt in ("-d", "--dataset"):
             global input_file
             input_file = arg
 
