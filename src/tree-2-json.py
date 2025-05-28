@@ -98,7 +98,6 @@ def fix_more_dots_in_name(path, filename):
     for i in range(len(split) - 1):
         fixed_name = fixed_name + split[i] + "_"
     fixed_name = fixed_name + "." + split[-1]
-    print("FIXED NAME", fixed_name)
     return fixed_name
 
 def rename_text_file(path, old_name, new_name):
@@ -145,9 +144,7 @@ def calculate_aligned_time(filename):
     return seconds_end - seconds_start
 
 def create_mono_audio(path, filename):
-    print(path ,filename)
     if "stereo" not in filename and "mono" not in filename:
-        print("IN IF CREATE MONO")
         new_name = filename.split(".")[0] + "-mono.wav"
 
         sound = AudioSegment.from_wav(path + filename)
@@ -155,13 +152,10 @@ def create_mono_audio(path, filename):
         sound.export(path + new_name, format="wav")
         return new_name
     else:
-        print("ELSE")
         return filename
 
 def create_stereo_audio(path, filename):
-    print(path, filename)
     if "stereo" not in filename and "mono" not in filename:
-        print("IN IF CREATE STEREO")
         new_name = filename.split(".")[0] + "-stereo.wav"
 
         sound = AudioSegment.from_wav(path + filename)
@@ -169,7 +163,6 @@ def create_stereo_audio(path, filename):
         sound.export(path + new_name, format="wav")
         return new_name
     else:
-        print("ELSE")
         return filename
 
 def process_tree_json(file):
@@ -194,8 +187,6 @@ def process_tree_json(file):
 
     for item in input_json[0]["contents"]:
         current_processed += 1
-        print("Processing", current_processed, "/", max_dir, "directories.")
-        print(item, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         if item["type"] == "directory":
             total_directories += 1
             clip = {}
@@ -223,9 +214,7 @@ def process_tree_json(file):
                             clip["raw-text"] = subitem["name"]
                             total_text_files += 1
                         elif is_file_audio(subitem["name"]):
-                            print(subitem["name"], clip["original-audio"])
                             if subitem["name"].endswith(".wav") and clip["original-audio"] == "":
-                                print("HERE")
                                 total_audio_files += 1
                                 clip["original-audio"] = subitem["name"]
                                 media_info = mediainfo(path + item["name"] + "/" + subitem["name"])
@@ -323,8 +312,6 @@ def process_tree_json(file):
                             print("Aligned data")
                         elif "training-data" in subitem["name"]:
                             print("Fine-tuned data")
-                        else:
-                            print("Else:", subitem["name"])
             json_out["data"].append(clip)
 
     json_out["total-duration-sec"] = round(total_duration,2)

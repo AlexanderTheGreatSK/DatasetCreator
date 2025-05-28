@@ -64,6 +64,6 @@ for item in json_data["data"]:
                 manifest += json.dumps(tmp, ensure_ascii=False) + "\n"
 
 file.close()
-file_out = open("./manifest.json", "w", encoding='utf-8')
+file_out = open("manifests/manifest.json", "w", encoding='utf-8')
 file_out.write(manifest)
 file_out.close()

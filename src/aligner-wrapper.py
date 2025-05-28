@@ -4,7 +4,7 @@
     Author: xokruc00
     Email: xokruc00@fit.vutbr.cz
 
-    This script serves as wrapper for NeMo Force Aligner.
+    This script serves as a wrapper for NeMo Force Aligner.
 """
 
 

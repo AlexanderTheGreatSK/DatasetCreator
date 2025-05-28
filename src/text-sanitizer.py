@@ -5,7 +5,7 @@
     Email: xokruc00@fit.vutbr.cz
 
     This script will sanitize text ane cut audio file to the text segment included in the transcription text file.
-    It will create new directory  for each audio with stereo and mono version of the audio.
+    It will create a new directory for each audio with a stereo and mono version of the audio.
 
     Input:
         -d / --dataset - path to dataset.json
@@ -84,19 +84,14 @@ def process_text(txt_file, stereo_output, mono_output, name, stereo_audio_path, 
     seconds_time = 0
 
     for line in txt_file:
-        #print(line)
 
         if re.search(r"\b\d{2}:\d{2}[–—-]\d{2}:\d{2}\b",line) is None and time_segment_found:
-            #print(line)
             if ":" in line:
                 line_split = line.split(":", 1)
                 line_sanitized = line_sanitizer(line_split[1])
                 text_segment = text_segment + line_sanitized.strip() + " "
         elif re.search(r"\b\d{2}:\d{2}:\d{2}[–—-]\d{2}:\d{2}:\d{2}\b",line) is not None:
-            print("3x: ", re.search(r"\b\d{2}:\d{2}:\d{2}[–—-]\d{2}:\d{2}:\d{2}\b",line).group())
             line = re.sub(r"(\b\d{2}:\d{2}:\d{2})[–—-](\d{2}:\d{2}:\d{2}\b)", r"\1-\2", line)
-            print("updated")
-            print(line)
             if text_segment != "":
                 Path(stereo_output).mkdir(parents=True, exist_ok=True)
                 Path(mono_output).mkdir(parents=True, exist_ok=True)
@@ -124,10 +119,7 @@ def process_text(txt_file, stereo_output, mono_output, name, stereo_audio_path, 
             if not time_segment_found:
                 time_segment_found = True
         elif re.search(r"\b\d{2}:\d{2}:\d{2}[–—-]\d{2}:\d{2}:\d{2}\b",line) is None and re.search(r"\b\d{2}:\d{2}[–—-]\d{2}:\d{2}\b",line) is not None:
-            print("2x: ", re.search(r"\b\d{2}:\d{2}[–—-]\d{2}:\d{2}\b",line).group())
             line = re.sub(r"(\b\d{2}:\d{2})[–—-](\d{2}:\d{2}\b)", r"\1-\2", line)
-            print("updated")
-            print(line)
             if text_segment != "":
                 Path(stereo_output).mkdir(parents=True, exist_ok=True)
                 Path(mono_output).mkdir(parents=True, exist_ok=True)
@@ -155,9 +147,6 @@ def process_text(txt_file, stereo_output, mono_output, name, stereo_audio_path, 
 
             if not time_segment_found:
                 time_segment_found = True
-        else:
-            #print("")
-            print(line)
 
 
     if text_segment != "":
@@ -193,7 +182,6 @@ aligned_time_sec = 0
 for data in loaded_input_file["data"]:
     if "raw-text" in data and "stereo-original-audio" in data and "mono-original-audio" in data:
         txt_file = open(path + data["dir-name"] + "/" + data["raw-text"],"r")
-        print(txt_file)
         output_dir_stereo = path + data["dir-name"] + "/" + "prep-data-alignment/stereo/"
         output_dir_mono = path + data["dir-name"] + "/" + "prep-data-alignment/mono/"
         split = data["raw-text"].split(".")
