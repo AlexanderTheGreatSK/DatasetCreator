@@ -1,8 +1,7 @@
 #!/bin/bash
 
-PATH_TO_ARCHIVE=/run/media/alex/fd10f3e8-6e40-44bd-bf1b-3c72bf2e1900/BP24/dataset-reduced/clips/
-DATASET_JSON=dataset.json
-MANIFEST_FILE=manifest.json
+PATH_TO_ARCHIVE=/mnt/matylda6/xokruc00/dataset/clips/
+DATASET_JSON=/mnt/matylda6/xokruc00/dataset/dataset.json
 
 # creates dataset.json from archive
 python src/tree-2-json.py -i "$PATH_TO_ARCHIVE" -y
@@ -15,4 +14,17 @@ python src/text-sanitizer.py -d "$PATH_TO_ARCHIVE"
 # this will align audio faster, but when error appears, it will stop alignment and you have to find the error
 # alternatively you can use one manifest for one audio and text file, this will take more time but when error occurs it will continue alignment
 python src/manifest-creator.py -d "$PATH_TO_ARCHIVE"
+
+#TODO rewrite this nfa wrapper for your local installation of NFA and uncomment that line
+#TODO match the output CTM directory in script
+#sh src/nfa-wrapper.sh
+
+CTM_FILES=/mnt/matylda6/xokruc00/dataset/clips/ctm/
+
+# this script will pair CTM file with its audio file
+python tools/align-data-sorter.py -d "$DATASET_JSON" -a "$CTM_FILES" -c "$PATH_TO_ARCHIVE"
+
+# this script will create sub-30 seconds clips for training
+TRAINING_TSV_PATH=/mnt/matylda6/xokruc00/dataset/
+python src/clip-cutter.py -d "$PATH_TO_ARCHIVE" -o "$TRAINING_TSV_PATH"
 

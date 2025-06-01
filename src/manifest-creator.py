@@ -14,6 +14,7 @@
 import getopt
 import json
 import sys
+from pathlib import Path
 
 
 def get_parameters():
@@ -37,9 +38,10 @@ json_data = json.load(file)
 
 manifest = ""
 path = json_data["path"]
+manifest_path = path.replace("clips/", "manifests/")
+Path(manifest_path).mkdir(parents=True, exist_ok=True)
 
 index = 0
-
 for item in json_data["data"]:
     dir = item["dir-name"] + "/"
     if "prep-data-alignment" in item:
@@ -52,18 +54,18 @@ for item in json_data["data"]:
                 with open(current_path + mono_clip["text"], "r", encoding="utf-8") as txt_file:
                     tmp["text"] = txt_file.readline()
 
-                name = "./manifest-" + str(index) + ".json"
+                name = "manifest-" + str(index) + ".json"
                 index += 1
 
                 tmp_manifest = json.dumps(tmp, ensure_ascii=False) + "\n"
 
-                file_out = open(name, "w", encoding='utf-8')
+                file_out = open(manifest_path + name, "w", encoding='utf-8')
                 file_out.write(tmp_manifest)
                 file_out.close()
 
                 manifest += json.dumps(tmp, ensure_ascii=False) + "\n"
 
 file.close()
-file_out = open("manifests/manifest.json", "w", encoding='utf-8')
+file_out = open(manifest_path + "manifest.json", "w", encoding='utf-8')
 file_out.write(manifest)
 file_out.close()
