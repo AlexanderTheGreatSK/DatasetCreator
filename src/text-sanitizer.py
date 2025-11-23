@@ -68,7 +68,9 @@ def cut_audio(path, audio, start_raw, end_raw):
 def line_sanitizer(line):
     line = re.sub(r"[\(\[\{].*?[\)\]\}]", "", line)
     line = re.sub(r"#", "", line)
+    line = re.sub(r"\.{2,}", " ", line)
     line = re.sub(r"\s+", " ", line)
+
 
     return line
 
@@ -84,14 +86,16 @@ def process_text(txt_file, stereo_output, mono_output, name, stereo_audio_path, 
     seconds_time = 0
 
     for line in txt_file:
-
-        if re.search(r"\b\d{2}:\d{2}[–—-]\d{2}:\d{2}\b",line) is None and time_segment_found:
+        if re.search(r"\b\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}\b",line) is None and time_segment_found:
             if ":" in line:
                 line_split = line.split(":", 1)
                 line_sanitized = line_sanitizer(line_split[1])
                 text_segment = text_segment + line_sanitized.strip() + " "
-        elif re.search(r"\b\d{2}:\d{2}:\d{2}[–—-]\d{2}:\d{2}:\d{2}\b",line) is not None:
-            line = re.sub(r"(\b\d{2}:\d{2}:\d{2})[–—-](\d{2}:\d{2}:\d{2}\b)", r"\1-\2", line)
+            else:
+                line_sanitized = line_sanitizer(line)
+                text_segment = text_segment + line_sanitized.strip() + " "
+        elif re.search(r"\b\d{2}:\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}:\d{2}\b",line) is not None:
+            line = re.sub(r"(\b\d{2}:\d{2}:\d{2})\s*[–—-]\s*(\d{2}:\d{2}:\d{2}\b)", r"\1-\2", line)
             if text_segment != "":
                 Path(stereo_output).mkdir(parents=True, exist_ok=True)
                 Path(mono_output).mkdir(parents=True, exist_ok=True)
@@ -112,14 +116,14 @@ def process_text(txt_file, stereo_output, mono_output, name, stereo_audio_path, 
                 cut_audio(mono_output + name + "_xs_" + text_time_segment, mono_audio, split_time[0], split_time[1])
 
                 text_segment = ""
-                time_segment = re.search(r"\b\d{2}:\d{2}:\d{2}[–—-]\d{2}:\d{2}:\d{2}\b",line).group()
+                time_segment = re.search(r"\b\d{2}:\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}:\d{2}\b",line).group()
             else:
-                time_segment = re.search(r"\b\d{2}:\d{2}:\d{2}[–—-]\d{2}:\d{2}:\d{2}\b",line).group()
+                time_segment = re.search(r"\b\d{2}:\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}:\d{2}\b",line).group()
 
             if not time_segment_found:
                 time_segment_found = True
-        elif re.search(r"\b\d{2}:\d{2}:\d{2}[–—-]\d{2}:\d{2}:\d{2}\b",line) is None and re.search(r"\b\d{2}:\d{2}[–—-]\d{2}:\d{2}\b",line) is not None:
-            line = re.sub(r"(\b\d{2}:\d{2})[–—-](\d{2}:\d{2}\b)", r"\1-\2", line)
+        elif re.search(r"\b\d{2}:\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}:\d{2}\b",line) is None and re.search(r"\b\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}\b",line) is not None:
+            line = re.sub(r"(\b\d{2}:\d{2})\s*[–—-]\s*(\d{2}:\d{2}\b)", r"\1-\2", line)
             if text_segment != "":
                 Path(stereo_output).mkdir(parents=True, exist_ok=True)
                 Path(mono_output).mkdir(parents=True, exist_ok=True)
@@ -141,12 +145,14 @@ def process_text(txt_file, stereo_output, mono_output, name, stereo_audio_path, 
                 cut_audio(mono_output + name + "_xs_" + text_time_segment, mono_audio, split_time[0], split_time[1])
 
                 text_segment = ""
-                time_segment = re.search(r"\b\d{2}:\d{2}[–—-]\d{2}:\d{2}\b",line).group()
+                time_segment = re.search(r"\b\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}\b",line).group()
             else:
-                time_segment = re.search(r"\b\d{2}:\d{2}[–—-]\d{2}:\d{2}\b",line).group()
+                time_segment = re.search(r"\b\d{2}:\d{2}\s*[–—-]\s*\d{2}:\d{2}\b",line).group()
 
             if not time_segment_found:
                 time_segment_found = True
+        else:
+            print(line)
 
 
     if text_segment != "":
