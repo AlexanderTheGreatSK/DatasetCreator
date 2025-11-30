@@ -69,6 +69,7 @@ def line_sanitizer(line):
     line = re.sub(r"[\(\[\{].*?[\)\]\}]", "", line)
     line = re.sub(r"#", "", line)
     line = re.sub(r"\.{2,}", " ", line)
+    line = re.sub(r"/{2,}", "", line)
     line = re.sub(r"\s+", " ", line)
 
 
