@@ -72,7 +72,6 @@ def line_sanitizer(line):
     line = re.sub(r"/{2,}", "", line)
     line = re.sub(r"\s+", " ", line)
 
-
     return line
 
 
@@ -192,6 +191,8 @@ for data in loaded_input_file["data"]:
         output_dir_stereo = path + data["dir-name"] + "/" + "prep-data-alignment/stereo/"
         output_dir_mono = path + data["dir-name"] + "/" + "prep-data-alignment/mono/"
         split = data["raw-text"].split(".")
+
+        print("Working on file: ", data["raw-text"])
         aligned_time_sec += process_text(txt_file, output_dir_stereo, output_dir_mono, split[0], data["stereo-original-audio"], data["mono-original-audio"], path + data["dir-name"] + "/")
 
 file.close()
