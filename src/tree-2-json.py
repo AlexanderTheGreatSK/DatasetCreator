@@ -17,6 +17,7 @@
     Parameters:
         -i --input path-to-data
         -y --yes - confirmation
+        -t --no-transformation - audio is not transformed ,it stays as it is
 
     Output:
         It will create dataset.json in current directory
@@ -29,12 +30,13 @@ from pydub import AudioSegment
 from pydub.utils import mediainfo
 
 confirmation = False
+transform = True
 
 def get_parameters():
     argv = sys.argv[1:]
 
     try:
-        opts, args = getopt.getopt(argv, "hyi:", ["input=","yes"])
+        opts, args = getopt.getopt(argv, "hyti:", ["input=","yes","no-transformation"])
     except:
         print("Error")
         exit(1)
@@ -46,6 +48,9 @@ def get_parameters():
         elif opt in ("-y", "--yes"):
             global confirmation
             confirmation = True
+        elif opt in ("-t", "--no-transformation"):
+            global transform
+            transform = False
 
 
 
@@ -223,10 +228,12 @@ def process_tree_json(file):
                                 curr_path = path + item["name"] + "/"
                                 if clip["audio-info"]["channels"] == 1:
                                     clip["mono-original-audio"] = subitem["name"]
-                                    clip["stereo-original-audio"] = create_stereo_audio(curr_path, subitem["name"])
+                                    if transform:
+                                        clip["stereo-original-audio"] = create_stereo_audio(curr_path, subitem["name"])
                                 else:
-                                    clip["mono-original-audio"] = create_mono_audio(curr_path, subitem["name"])
                                     clip["stereo-original-audio"] = subitem["name"]
+                                    if transform:
+                                        clip["mono-original-audio"] = create_mono_audio(curr_path, subitem["name"])
 
                                 total_duration += duration
                             elif clip["original-audio"] == "":
@@ -237,12 +244,13 @@ def process_tree_json(file):
                                 clip["audio-info"], duration = create_audio_info_json(media_info["sample_rate"],media_info["duration"],media_info["channels"],media_info["codec_name"])
 
                                 curr_path = path + item["name"] + "/"
-                                if clip["audio-info"]["channels"] == 1:
-                                    clip["mono-original-audio"] = clip["original-audio"]
-                                    clip["stereo-original-audio"] = create_stereo_audio(curr_path, clip["original-audio"])
-                                else:
-                                    clip["mono-original-audio"] = create_mono_audio(curr_path, clip["original-audio"])
-                                    clip["stereo-original-audio"] = clip["original-audio"]
+                                if transform:
+                                    if clip["audio-info"]["channels"] == 1:
+                                        clip["mono-original-audio"] = clip["original-audio"]
+                                        clip["stereo-original-audio"] = create_stereo_audio(curr_path, clip["original-audio"])
+                                    else:
+                                        clip["mono-original-audio"] = create_mono_audio(curr_path, clip["original-audio"])
+                                        clip["stereo-original-audio"] = clip["original-audio"]
 
                                 total_duration += duration
                     elif subitem["type"] == "directory":
